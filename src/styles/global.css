@@ -1,0 +1,25 @@
+/* Base styles and animations from the LettuBoost Ops design. */
+html, body { margin:0; padding:0; background:#f4f7f1; color:#12241a; font-family:'Archivo', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+* { box-sizing:border-box; }
+a { color:#097c3e; text-decoration:none; }
+a:hover { color:#0b9c4e; }
+input, select, textarea, button { font-family:inherit; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline:2px solid #80cc28; outline-offset:2px; }
+::selection { background:#80cc28; color:#12241a; }
+@keyframes om-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+@keyframes om-pop { 0% { opacity:0; transform:scale(.5) rotate(-40deg); } 60% { opacity:1; transform:scale(1.08) rotate(4deg); } 100% { opacity:1; transform:scale(1) rotate(0); } }
+@keyframes om-wipe { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0 0 0 0); } }
+@keyframes om-rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes om-splash { 0%,64% { opacity:1; visibility:visible; } 100% { opacity:0; visibility:hidden; } }
+@keyframes om-bar { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes om-toast { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+
+/* Mobile-only controls are hidden on desktop. */
+.lb-burger, .lb-backdrop { display:none; }
+
+@media print {
+  #app-side, #app-top, #slip-bar, [data-np], .lb-burger, .lb-backdrop { display:none !important; }
+  #print-sheet { margin:0 !important; padding:0 !important; border-radius:0 !important; box-shadow:none !important; max-width:none !important; animation:none !important; }
+  main { padding:0 !important; }
+  body { background:#ffffff !important; }
+}

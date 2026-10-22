@@ -1,0 +1,15 @@
+/* Generated hover / focus / active styles (inline styles need !important to be overridden). */
+.hv1:hover { background:rgba(255,255,255,.2) !important; }
+.hv2:hover { background:rgba(255,255,255,.1) !important; }
+.hv3:hover { background:rgba(255,255,255,.12) !important; color:#ffffff !important; }
+.hv4:hover { background:rgba(255,255,255,.18) !important; }
+.hv5:hover { background:#b3261e !important; }
+.hv6:hover { color:#ffffff !important; }
+.hv7:hover { transform:translateY(-1px) !important; }
+.hv8:hover { box-shadow:inset 0 0 0 1.5px #bcd8b0 !important; }
+.hv9:hover { transform:translateY(-1px) !important; background:var(--wash) !important; }
+.aca:active { transform:translateY(1px) !important; }
+.fcb:focus { background:var(--tint) !important; }
+.hvc:hover { background:#fdeceb !important; color:#b3261e !important; }
+.hvd:hover { background:var(--wash) !important; }
+.hve:hover { background:var(--tint) !important; }
