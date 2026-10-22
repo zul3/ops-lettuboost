@@ -238,3 +238,9 @@ function rawSeedState() {
 export function defaultConfig() {
   return { statutory: seedStatutory(), uoms: seedUoms(), tasks: seedPieceTasks(), catRates: seedCatRates(), zakatOn: {} };
 }
+
+// A blank console: no people, no records. Only the settings the app needs to run (pay bands, statutory items, units).
+export function emptyState() {
+  const o = { users: [], audit: [], employees: [], requests: [], notifications: [], claims: [], reports: [], items: [], moves: [], customers: [], docs: [], sups: [], pos: [], projects: [], works: [], hr: {}, photos: {}, prefs: {} };
+  return Object.assign(o, defaultConfig());
+}

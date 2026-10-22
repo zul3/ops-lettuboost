@@ -9,7 +9,7 @@
 
 import { supabase, isSupabase, UPLOAD_BUCKET } from './supabase.js';
 import { hydrate, dehydrate } from '../logic/samples.js';
-import { seedState, defaultConfig } from '../logic/seed.js';
+import { seedState, emptyState, defaultConfig } from '../logic/seed.js';
 import { uid, todayIso } from '../logic/helpers.js';
 import { COLLECTIONS, MAPS, SETTINGS_TABLE, SETTINGS_KEYS, ALL_TABLES, PERSISTED } from './store.tables.js';
 
@@ -83,7 +83,8 @@ export class Store {
   loadLocal() {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null'); } catch (e) { saved = null; }
-    const base = seedState(todayIso());
+    // Local mode starts blank. Set VITE_DEMO_DATA=true to start with the design's sample data.
+    const base = (import.meta.env || {}).VITE_DEMO_DATA === 'true' ? seedState(todayIso()) : emptyState();
     if (!saved) return hydrate(base);
     const out = {};
     for (const k of PERSISTED) out[k] = k in saved ? saved[k] : base[k];

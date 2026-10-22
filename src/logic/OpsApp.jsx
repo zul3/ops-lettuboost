@@ -179,8 +179,16 @@ export default class OpsApp extends React.Component {
     const email = String(loginEmail).trim().toLowerCase();
     if (!email || !loginPassword) { this.setState({ loginError: 'Enter your email and password to continue.' }); return; }
     if (!isSupabase) {
+      if (!this.state.users.length) {
+        // First run on an empty console: whoever signs in first becomes the system admin.
+        const name = email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const mods = Object.assign({}, this.ROLE_MODS['System admin']);
+        this.MODS.forEach(m => { mods[m.id] = true; });
+        this.setState(st => ({ users: [{ id: 'admin', name, email, role: 'System admin', active: true, mods }], audit: [{ id: uid('a'), t: 'Created the first admin account for ' + name, by: name, d: stamp() }].concat(st.audit) }), () => this.doLogin());
+        return;
+      }
       const u = this.state.users.find(x => String(x.email).toLowerCase() === email);
-      if (!u) { this.setState({ loginError: 'No console account uses that email. Try zul@lettuboost.com.' }); return; }
+      if (!u) { this.setState({ loginError: 'No console account uses that email. Ask a system admin to add you.' }); return; }
       if (!u.active) { this.setState({ loginError: 'This account is deactivated. Contact a system admin.' }); return; }
       try { if (this.state.rememberMe) localStorage.setItem(DEMO_USER, u.id); } catch (er) { /* ignore */ }
       this.setState(Object.assign({ authed: true, loginError: '', loginPassword: '', me: u.id, route: this.firstHome(u) }, this.afterLoad(this.state, u.id)));
@@ -743,7 +751,7 @@ export default class OpsApp extends React.Component {
   openTask(id) { const w = this.state.works.find(x => x.id === id); if (w) this.setState({ taskForm: Object.assign({}, w, { progress: String(w.progress) }) }); }
   newTask(projId, parentId) {
     const me = this.state.me, e = this.state.employees;
-    this.setState({ taskForm: { id: null, projId: projId || '', parentId: parentId || '', title: '', assignee: e.some(x => x.id === me) ? me : e[0].id, start: this.TODAY, end: this.isoN(this.dayN(this.TODAY) + 6), status: 'todo', progress: '0', priority: 'Medium', notes: '' } });
+    this.setState({ taskForm: { id: null, projId: projId || '', parentId: parentId || '', title: '', assignee: e.some(x => x.id === me) ? me : (e[0] || {}).id || '', start: this.TODAY, end: this.isoN(this.dayN(this.TODAY) + 6), status: 'todo', progress: '0', priority: 'Medium', notes: '' } });
   }
   tfSave = () => {
     const f = this.state.taskForm;
@@ -759,7 +767,7 @@ export default class OpsApp extends React.Component {
   };
   tfDelete = () => { const f = this.state.taskForm; this.setWorks(ws => ws.filter(x => x.id !== f.id && x.parentId !== f.id)); this.setState({ taskForm: null }); this.toastNow('Task deleted.'); };
   openProj(id) { const p = this.state.projects.find(x => x.id === id); if (p) this.setState({ projForm: Object.assign({}, p) }); }
-  newProj = () => this.setState({ projForm: { id: null, name: '', desc: '', owner: this.state.employees[0].id, start: this.TODAY, end: this.isoN(this.dayN(this.TODAY) + 60), status: 'Planning', color: '#097c3e' } });
+  newProj = () => this.setState({ projForm: { id: null, name: '', desc: '', owner: (this.state.employees[0] || {}).id || '', start: this.TODAY, end: this.isoN(this.dayN(this.TODAY) + 60), status: 'Planning', color: '#097c3e' } });
   pjSave = () => {
     const f = this.state.projForm;
     if (!f.name.trim()) { this.toastNow('Name the project.'); return; }

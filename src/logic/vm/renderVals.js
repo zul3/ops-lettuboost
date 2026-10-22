@@ -440,7 +440,7 @@ export function loginVals() {
     loginSwitchLabel: s.loginMode === 'signup' ? 'Sign in instead' : 'Create your password',
     toggleLoginMode: this.toggleLoginMode,
     showSignup: isSupabase,
-    loginHint: isSupabase ? 'Your email must be on the team list. Contact your ops admin for access.' : 'Demo mode: data stays in this browser. Sign in as zul@lettuboost.com (founder) or admin@lettuboost.com with any password.',
+    loginHint: isSupabase ? 'Your email must be on the team list. Contact your ops admin for access.' : (s.users.length ? 'Local mode: data stays in this browser. Use an email from System admin -> Users, with any password.' : 'First run: enter your own email and any password. You become the system admin. Data stays in this browser.'),
     // mobile navigation
     isMobile: s.isMobile, mobileNavOpen: s.isMobile && s.navOpen,
     navClose: () => this.setState({ navOpen: false }),

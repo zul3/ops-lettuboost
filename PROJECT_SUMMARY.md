@@ -32,7 +32,8 @@ Key business rules (from the design):
 - React 19 + Vite 7, plain JavaScript (no TypeScript, no router, no CSS framework).
 - Supabase: Auth (email + password), Postgres (all data), Storage (bucket `ops-uploads`), Realtime (live sync).
 - Hosted on Vercel (`vercel.json`). Env vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
-- No env vars = local demo mode: seed data, any password, saved to `localStorage` only.
+- No Supabase env vars = local mode: starts blank, the first email to sign in becomes the system admin (any password),
+  saved to `localStorage` only. `VITE_DEMO_DATA=true` loads the design's sample data instead.
 
 ## Code map
 
@@ -46,7 +47,7 @@ src/logic/vm/*.js          view models. renderVals() builds one flat object `v` 
                            loginVals() = values for splash / sign-in / toast before data loads
 src/logic/constants.js     CATS, ROUTES, MODS, ROLE_MODS, status colours... (mixed into OpsApp.prototype)
 src/logic/icons.js         SVG path strings for <Icon/>
-src/logic/seed.js          demo data (anchored on 2026-09-07, shifted to "today" by seedState(today))
+src/logic/seed.js          sample data (anchored on 2026-09-07, shifted to "today" by seedState(today)); emptyState() = blank console
 src/logic/samples.js       canvas-drawn sample receipts/photos ({ sample: [label, hue, kind] })
 src/logic/helpers.js       todayIso, yymm, stamp, uid, rollup
 src/lib/supabase.js        Supabase client ("remember me" picks localStorage vs sessionStorage)
@@ -100,8 +101,9 @@ reports, audit, items, moves, customers, docs, sups, pos, projects, works` (tabl
 ## Testing notes
 
 - `npm run build` must pass. `VITE_TEST_HOOKS=1 npm run build` exposes `window.__ops` for browser tests.
-- Demo logins (local mode or seed.sql): `zul@`, `pj@`, `neil@` (founders), `aina@`, `haziq@`, `melissa@`
-  (staff), `admin@lettuboost.com` (system admin). Local mode accepts any password.
+- Sample-data logins (`VITE_DEMO_DATA=true` or `seed.sql`): `zul@`, `pj@`, `neil@` (founders), `aina@`, `haziq@`,
+  `melissa@` (staff), `admin@lettuboost.com` (system admin), all `@lettuboost.com`. Local mode accepts any password.
+- Blank-state test: sign in with any email on a fresh browser profile; all routes were crawled with no errors.
 
 ## Known gaps / next steps
 
